@@ -5,9 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client"
-  output          = "../app/generated/prisma"
-  previewFeatures = ["fullTextSearch"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -16,26 +14,40 @@ datasource db {
 }
 
 model User {
-  id          String  @id
-  username    String  @unique
-  displayName String
-  email       String? @unique
-  passwordHash String? 
-  googleId String? @unique
-  avatarUrl String? 
-  bio String?
-  sessions Session[]
+  id             String    @id
+  username       String    @unique
+  displayName    String
+  email          String?   @unique
+  email_verified Boolean   @default(false)
+  expires        BigInt    @default(0)
+  passwordHash   String?
+  googleId       String?   @unique
+  avatarUrl      String?
+  bio            String?
+  sessions       Session[]
 
-  createdAt DateTime @default(now())
+  createdAt              DateTime                 @default(now())
+  EmailVerificationToken EmailVerificationToken[]
 
   @@map("users")
 }
 
 model Session {
-  id String @id
-  userId String
+  id        String   @id
+  userId    String
   expiresAt DateTime
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model EmailVerificationToken {
+  id        String   @id
+  userId    String
+  email     String
+  expiresAt DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_verification_tokens")
 }

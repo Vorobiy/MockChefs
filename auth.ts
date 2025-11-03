@@ -12,7 +12,7 @@ export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
     attributes: {
-      secure: process.env.NODE_END === "production",
+      secure: process.env.NODE_ENV === "production",
     },
   },
   getUserAttributes(databaseUserAttributes) {
@@ -34,6 +34,8 @@ declare module "lucia" {
 }
 
 interface DatabaseUserAttributes {
+  email_verified: boolean;
+  email: string;
   id: string;
   username: string;
   displayName: string;
