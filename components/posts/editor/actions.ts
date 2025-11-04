@@ -9,12 +9,12 @@ export async function submitPost(input: string) {
 
   if (!user) throw Error("Unauthorized");
 
-  const {} = createPostSchema.parse({ content: input });
+  const { content } = createPostSchema.parse({ content: input });
 
   await prisma.post.create({
     data: {
+      content,
       userId: user.id,
-      createdAt: Date.now().toString(),
     },
   });
 }

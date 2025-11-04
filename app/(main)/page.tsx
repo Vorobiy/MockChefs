@@ -1,7 +1,11 @@
+import PostEditor from "@/components/posts/editor/PostEditor";
+
 export default function Home() {
   return (
-    <main className="h-[200vh] w-full">
-      <div className="w=full">Front Page</div>
+    <main className="h-[200vh] w-full rounded-2xl bg-green-50">
+      <div className="w=full">
+        <PostEditor />
+      </div>
     </main>
   );
 }
