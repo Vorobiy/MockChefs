@@ -28,6 +28,7 @@ model User {
 
   createdAt              DateTime                 @default(now())
   EmailVerificationToken EmailVerificationToken[]
+  Post                   Post[]
 
   @@map("users")
 }
@@ -36,7 +37,7 @@ model Session {
   id        String   @id
   userId    String
   expiresAt DateTime
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -50,4 +51,40 @@ model EmailVerificationToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("email_verification_tokens")
+}
+
+model Instruction {
+  id        Int      @id @default(autoincrement())
+  title     String
+  steps     Step[]
+  posts     Post[]   @relation("InstructionPosts")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Post Post[]
+}
+
+model Step {
+  id            Int         @id @default(autoincrement())
+  instruction   Instruction @relation(fields: [instructionId], references: [id])
+  instructionId Int
+  position      Int
+  content       String
+  meta          Json?
+  createdAt     DateTime    @default(now())
+
+  @@index([instructionId, position])
+}
+
+model Post {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime
+  upvotes     Int           @default(0)
+  downvotes   Int           @default(0)
+  instruction Instruction[]
+  remixes     Int           @default(0)
+
+  Instruction Instruction[] @relation("InstructionPosts")
 }
