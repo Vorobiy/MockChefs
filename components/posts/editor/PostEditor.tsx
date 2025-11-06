@@ -8,12 +8,17 @@ import UserAvatar from "@/components/UserAvatar";
 import { useSession } from "@/app/(main)/SessionProvider";
 import { Button } from "@/components/ui/button";
 import "./styles.css";
+import { useState } from "react";
 
 export default function PostEditor() {
   const { user } = useSession();
+  const [input, setInput] = useState("");
 
   const editor = useEditor({
     immediatelyRender: false,
+    onUpdate({ editor }) {
+      setInput(editor.getText());
+    },
     extensions: [
       StarterKit.configure({
         bold: false,
@@ -25,7 +30,7 @@ export default function PostEditor() {
     ],
   });
 
-  const input =
+  const inputs =
     editor?.getText({
       blockSeparator: "\n",
     }) || "";
@@ -33,6 +38,7 @@ export default function PostEditor() {
   async function onSubmit() {
     await submitPost(input);
     editor?.commands.clearContent();
+    setInput("");
   }
 
   return (
@@ -42,16 +48,17 @@ export default function PostEditor() {
           avatarUrl={user.avatarUrl}
           className="hidden sm:inline"
           size={0}
+          username={user.username}
         />
         <EditorContent
           editor={editor}
-          className="bg-secondary text-popover max-h-80 w-full overflow-y-auto rounded-2xl px-5 py-3"
+          className="bg-secondary text-card-foreground max-h-80 w-full overflow-y-auto rounded-2xl px-5 py-3"
         />
       </div>
       <div className="flex justify-end">
         <Button
           onClick={onSubmit}
-          disabled={!input.trim()}
+          disabled={!inputs.trim()}
           className="min-w-20"
         >
           Post
