@@ -1,3 +1,5 @@
+"use client";
+
 import { Toaster } from "@/components/ui/sonner";
 import {
   InfiniteData,
@@ -37,6 +39,13 @@ export function useSubmitPostMutation() {
           }
         },
       );
+
+      queryClient.invalidateQueries({
+        queryKey: queryFilter.queryKey,
+        predicate(query) {
+          return !query.state.data;
+        },
+      });
 
       toast("Post Uploaded. ", {
         description:

@@ -1,5 +1,3 @@
-//authentication of users in the database, authenticates and
-
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "./lib/prisma";
 import { Lucia, Session, User } from "lucia";

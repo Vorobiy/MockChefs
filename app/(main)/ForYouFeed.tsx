@@ -8,6 +8,7 @@ import { PostData, PostsPage } from "@/lib/types";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import PostsLoadingSkeleton from "../api/posts/for-you/PostLoadingSkeleton";
+import DeletePostDialogue from "@/components/posts/editor/DeletePostDialogue";
 
 export default function ForYouFeed() {
   const {
